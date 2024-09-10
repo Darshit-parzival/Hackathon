@@ -97,7 +97,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
           <div class="row">
             <div class="col-md-6">
               <h2>Create Time Table</h2>
-              <form id="timetableForm">
+              <form id="timetableForm" method="post" action="submit_form.php">
                 <!-- College Name -->
                 <div class="mb-3">
                   <label for="college" class="form-label">College Name</label>
@@ -165,7 +165,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
       </main>
     </div>
   </div>
-  </body>+
+  </body>
   <script>
     // Function to dynamically add subject fields
     function addSubject() {
