@@ -116,9 +116,10 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
 
                 <!-- Subject Name and Hours (Dynamic) -->
                 <div id="subjectContainer" class="mb-3">
-                  <label for="subject" class="form-label">Subject Name and Hours per Week</label>
+                  <label for="subject" class="form-label">Subject Name, Subject Code and Hours per Week</label>
                   <div class="input-group mb-3">
                     <input type="text" class="form-control" name="subjects[]" placeholder="Subject name" required>
+                    <input type="number" class="form-control" name="subjectcodes[]" placeholder="Subject Code" required>
                     <input type="number" class="form-control" name="subjectHours[]" placeholder="Hours per week" min="1" required>
                     <button type="button" class="btn btn-success" onclick="addSubject()">+</button>
                   </div>
@@ -174,6 +175,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
     newField.classList.add('input-group', 'mb-3');
     newField.innerHTML = `
       <input type="text" class="form-control" name="subjects[]" placeholder="Subject name" required>
+      <input type="text" class="form-control" name="subjectcodes[]" placeholder="Subject Code" required>
       <input type="number" class="form-control" name="subjectHours[]" placeholder="Hours per week" min="1" required>
       <button type="button" class="btn btn-danger" onclick="removeFieldF(this)">-</button>
     `;
@@ -199,6 +201,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
     newFacultyField.innerHTML = `
     <div class="input-group mb-3">
       <input type="text" class="form-control" name="faculties[]" placeholder="Faculty name" required>
+      <input type="text" class="form-control" name="codes[]" placeholder="Subject Code" required>
       <button type="button" class="btn btn-danger" onclick="removeField(this)">-</button>
     </div>
     <div class="d-flex flex-wrap mb-3" id="${facultyId}">
@@ -229,7 +232,6 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
     </div>
   `;
     availabilityContainer.appendChild(newFacultyField);
-    alert(`availability_${facultyId}`);
   }
   // Function to remove dynamically added fields
   function removeField(button) {
