@@ -89,5 +89,3 @@ if (isset($_POST['faculties'])) {
 // Close connection
 $stmt->close();
 $conn->close();
-
-echo "Data submitted successfully!";
