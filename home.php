@@ -60,73 +60,109 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
     </div>
   </header>
 
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-md-6">
-        <h2>Create Time Table</h2>
-        <form id="timetableForm">
-          <!-- College Name -->
-          <div class="mb-3">
-            <label for="college" class="form-label">College Name</label>
-            <input type="text" class="form-control" id="college" name="college" placeholder="Enter college name" required>
-          </div>
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">
+                <span data-feather="home"></span>
+                Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file"></span>
+                Create TimeTable
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="shopping-cart"></span>
+                Display TimeTable
+              </a>
+            </li>
 
-          <!-- Branch Name and Semester -->
-          <div class="mb-3">
-            <label for="branch" class="form-label">Branch Name</label>
-            <input type="text" class="form-control" id="branch" name="branch" placeholder="Enter branch name" required>
-          </div>
-          <div class="mb-3">
-            <label for="semester" class="form-label">Semester</label>
-            <input type="number" class="form-control" id="semester" name="semester" placeholder="Enter semester number" min="1" max="10" required>
-          </div>
+          </ul>
+        </div>
+      </nav>
 
-          <!-- Subject Name and Hours (Dynamic) -->
-          <div id="subjectContainer" class="mb-3">
-            <label for="subject" class="form-label">Subject Name and Hours per Week</label>
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" name="subjects[]" placeholder="Subject name" required>
-              <input type="number" class="form-control" name="subjectHours[]" placeholder="Hours per week" min="1" required>
-              <button type="button" class="btn btn-success" onclick="addSubject()">+</button>
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">For Non technical</h1>
+        </div>
+
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h2>Create Time Table</h2>
+              <form id="timetableForm">
+                <!-- College Name -->
+                <div class="mb-3">
+                  <label for="college" class="form-label">College Name</label>
+                  <input type="text" class="form-control" id="college" name="college" placeholder="Enter college name" required>
+                </div>
+
+                <!-- Branch Name and Semester -->
+                <div class="mb-3">
+                  <label for="branch" class="form-label">Branch Name</label>
+                  <input type="text" class="form-control" id="branch" name="branch" placeholder="Enter branch name" required>
+                </div>
+                <div class="mb-3">
+                  <label for="semester" class="form-label">Semester</label>
+                  <input type="number" class="form-control" id="semester" name="semester" placeholder="Enter semester number" min="1" max="10" required>
+                </div>
+
+                <!-- Subject Name and Hours (Dynamic) -->
+                <div id="subjectContainer" class="mb-3">
+                  <label for="subject" class="form-label">Subject Name and Hours per Week</label>
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="subjects[]" placeholder="Subject name" required>
+                    <input type="number" class="form-control" name="subjectHours[]" placeholder="Hours per week" min="1" required>
+                    <button type="button" class="btn btn-success" onclick="addSubject()">+</button>
+                  </div>
+                </div>
+
+                <!-- Faculty (Dynamic) -->
+                <div id="facultyContainer" class="mb-3">
+                  <label for="faculty" class="form-label">Faculty and Availability</label>
+                  <div id="availabilityContainer"></div>
+                  <button type="button" class="btn btn-success" onclick="addFaculty()">+</button>
+                </div>
+
+                <!-- College Start and End Time -->
+                <div class="mb-3">
+                  <label for="start_time" class="form-label">College Start Time</label>
+                  <input type="time" class="form-control" id="start_time" name="start_time" required>
+                </div>
+                <div class="mb-3">
+                  <label for="end_time" class="form-label">College End Time</label>
+                  <input type="time" class="form-control" id="end_time" name="end_time" required>
+                </div>
+
+                <!-- Break Time -->
+                <div class="mb-3">
+                  <label for="break_time" class="form-label">Break Time (Must be within college hours)</label>
+                  <input type="time" class="form-control" id="break_time" name="break_time" required>
+                </div>
+
+                <!-- Break Duration -->
+                <div class="mb-3">
+                  <label for="break_duration" class="form-label">Break Duration</label>
+                  <select class="form-control" id="break_duration" name="break_duration" required>
+                    <option value="30">30 minutes</option>
+                    <option value="60">1 hour</option>
+                  </select>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
             </div>
           </div>
-
-          <!-- Faculty (Dynamic) -->
-          <div id="facultyContainer" class="mb-3">
-            <label for="faculty" class="form-label">Faculty and Availability</label>
-            <div id="availabilityContainer"></div>
-            <button type="button" class="btn btn-success" onclick="addFaculty()">+</button>
-          </div>
-
-          <!-- College Start and End Time -->
-          <div class="mb-3">
-            <label for="start_time" class="form-label">College Start Time</label>
-            <input type="time" class="form-control" id="start_time" name="start_time" required>
-          </div>
-          <div class="mb-3">
-            <label for="end_time" class="form-label">College End Time</label>
-            <input type="time" class="form-control" id="end_time" name="end_time" required>
-          </div>
-
-          <!-- Break Time -->
-          <div class="mb-3">
-            <label for="break_time" class="form-label">Break Time (Must be within college hours)</label>
-            <input type="time" class="form-control" id="break_time" name="break_time" required>
-          </div>
-
-          <!-- Break Duration -->
-          <div class="mb-3">
-            <label for="break_duration" class="form-label">Break Duration</label>
-            <select class="form-control" id="break_duration" name="break_duration" required>
-              <option value="30">30 minutes</option>
-              <option value="60">1 hour</option>
-            </select>
-          </div>
-
-          <!-- Submit Button -->
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-      </div>
+        </div>
+      </main>
     </div>
   </div>
   </body>+
