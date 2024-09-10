@@ -44,7 +44,7 @@ if (isset($_POST['subjects']) && isset($_POST['subjectHours'])) {
         $subject_name = $subjects[$i];
         $hours_per_week = $subjectHours[$i];
 
-        $sql = "INSERT INTO subjects (id, college_id, subject_name, hours_per_week) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO subjects (subject_code, college_id, subject_name, hours_per_week) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("iisi", $id, $college_id, $subject_name, $hours_per_week);
         $stmt->execute();
