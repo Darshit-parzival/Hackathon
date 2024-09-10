@@ -6,6 +6,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
   exit;
 }
 
+
 ?>
 
 
@@ -96,7 +97,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
           <div class="row">
             <div class="col-md-6">
               <h2>Create Time Table</h2>
-              <form id="timetableForm">
+              <form id="timetableForm" action="submit_form.php" method="POST">
                 <!-- College Name -->
                 <div class="mb-3">
                   <label for="college" class="form-label">College Name</label>
@@ -141,14 +142,14 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
     </div>
   </div>
   <script>
-  function addFaculty() {
-    const availabilityContainer = document.getElementById('availabilityContainer');
-    const facultyId = `faculty-${Date.now()}`;
+    function addFaculty() {
+      const availabilityContainer = document.getElementById('availabilityContainer');
+      const facultyId = `faculty-${Date.now()}`;
 
-    // Create faculty input and availability checkboxes
-    const newFacultyField = document.createElement('div');
-    newFacultyField.classList.add('mb-3');
-    newFacultyField.innerHTML = `
+      // Create faculty input and availability checkboxes
+      const newFacultyField = document.createElement('div');
+      newFacultyField.classList.add('mb-3');
+      newFacultyField.innerHTML = `
       <div class="input-group mb-3">
         <input type="text" class="form-control" name="faculties[]" placeholder="Faculty name" required>
         <button type="button" class="btn btn-danger" onclick="removeField(this)">-</button>
@@ -180,14 +181,14 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
         </div>
       </div>
     `;
-    availabilityContainer.appendChild(newFacultyField);
-  }
+      availabilityContainer.appendChild(newFacultyField);
+    }
 
-  // Function to remove fields
-  function removeField(button) {
-    button.parentElement.parentElement.remove();
-  }
-</script>
+    // Function to remove fields
+    function removeField(button) {
+      button.parentElement.parentElement.remove();
+    }
+  </script>
 
   <script src="bootstrap.bundle.min.js"></script>
 
