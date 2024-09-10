@@ -21,11 +21,13 @@ $start_time = $_POST['start_time'];
 $end_time = $_POST['end_time'];
 $break_time = $_POST['break_time'];
 $break_duration = $_POST['break_duration'];
+$classrooms= $_POST['classrooms'];
+$batches = $_POST['batches'];
 
 // Insert into colleges table
 $sql = "INSERT INTO colleges (college_name, branch_name, semester, start_time, end_time, classrooms, batches) VALUES (?, ?, ?, ?, ?,?,?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssissii", $college_name, $branch_name, $semester, $start_time, $end_time);
+$stmt->bind_param("ssissii", $college_name, $branch_name, $semester, $start_time, $end_time, $classrooms, $batches);
 $stmt->execute();
 
 // Get the last inserted college ID

@@ -118,7 +118,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
                 <div id="classContainer" class="mb-3">
                   <label for="class" class="form-label">Total Classrooms & Total Batches (Per Classrooms)</label>
                   <div class="input-group mb-3">
-                    <input type="number" min="0" max="3" class="form-control" name="classrooms" placeholder="Total Classrooms" required>
+                    <input type="number" min="1" max="3" class="form-control" name="classrooms" placeholder="Total Classrooms" required>
                     <input type="number" min="0" max="3" class="form-control" name="batches" placeholder="Total Batches (Per Classrooms)" required>
                   </div>
                 </div>
