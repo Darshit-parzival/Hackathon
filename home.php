@@ -129,6 +129,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
       </div>
     </div>
   </div>
+  </body>+
   <script>
     // Function to dynamically add subject fields
     function addSubject() {
