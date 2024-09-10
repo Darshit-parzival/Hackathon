@@ -131,6 +131,21 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
                   <input type="time" class="form-control" id="end_time" name="end_time" required>
                 </div>
 
+                <!-- Break Time -->
+                <div class="mb-3">
+                  <label for="break_time" class="form-label">Break Time (Must be within college hours)</label>
+                  <input type="time" class="form-control" id="break_time" name="break_time" required>
+                </div>
+
+                <!-- Break Duration -->
+                <div class="mb-3">
+                  <label for="break_duration" class="form-label">Break Duration</label>
+                  <select class="form-control" id="break_duration" name="break_duration" required>
+                    <option value="30">30 minutes</option>
+                    <option value="60">1 hour</option>
+                  </select>
+                </div>
+
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
@@ -179,7 +194,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
           <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Sat">
           <label class="form-check-label">Sat</label>
         </div>
-      </div>
+      </div>xxz
     `;
       availabilityContainer.appendChild(newFacultyField);
     }
@@ -188,6 +203,34 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
     function removeField(button) {
       button.parentElement.parentElement.remove();
     }
+
+    // Form validation
+    document.getElementById('timetableForm').addEventListener('submit', function(e) {
+      const startTime = document.getElementById('start_time').value;
+      const endTime = document.getElementById('end_time').value;
+      const breakTime = document.getElementById('break_time').value;
+      const breakDuration = document.getElementById('break_duration').value;
+
+      // Convert time strings to Date objects for comparison
+      const start = new Date(`1970-01-01T${startTime}:00`);
+      const end = new Date(`1970-01-01T${endTime}:00`);
+      const breakStart = new Date(`1970-01-01T${breakTime}:00`);
+      const breakEnd = new Date(breakStart.getTime() + breakDuration * 60 * 1000);
+
+      // Check if break time is between start and end time
+      if (breakStart <= start || breakEnd >= end) {
+        alert("Break time must be between the college start and end time.");
+        e.preventDefault(); // Prevent form submission
+        return;
+      }
+
+      // If break is not exactly 30 minutes or 1 hour, show an error
+      if (breakDuration !== "30" && breakDuration !== "60") {
+        alert("Break duration must be either 30 minutes or 1 hour.");
+        e.preventDefault(); // Prevent form submission
+        return;
+      }
+    });
   </script>
 
   <script src="bootstrap.bundle.min.js"></script>
