@@ -165,102 +165,113 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
       </main>
     </div>
   </div>
-  </body>
-  <script>
-    // Function to dynamically add subject fields
-    function addSubject() {
-      const subjectContainer = document.getElementById('subjectContainer');
-      const newField = document.createElement('div');
-      newField.classList.add('input-group', 'mb-3');
-      newField.innerHTML = `
+</body>
+<script>
+  // Function to dynamically add subject fields
+  function addSubject() {
+    const subjectContainer = document.getElementById('subjectContainer');
+    const newField = document.createElement('div');
+    newField.classList.add('input-group', 'mb-3');
+    newField.innerHTML = `
       <input type="text" class="form-control" name="subjects[]" placeholder="Subject name" required>
       <input type="number" class="form-control" name="subjectHours[]" placeholder="Hours per week" min="1" required>
+      <button type="button" class="btn btn-danger" onclick="removeFieldF(this)">-</button>
+    `;
+    subjectContainer.appendChild(newField);
+  }
+
+  // Function to dynamically add faculty and availability fields
+  let facultyCounter = 0;
+
+  // Function to dynamically add faculty fields
+  function addFaculty() {
+    const availabilityContainer = document.getElementById('availabilityContainer');
+
+    // Use the counter as the facultyId
+    const facultyId = `faculty-${facultyCounter}`;
+
+    // Increment the counter for the next faculty
+    facultyCounter++;
+
+    // Create faculty input and availability checkboxes
+    const newFacultyField = document.createElement('div');
+    newFacultyField.classList.add('mb-3');
+    newFacultyField.innerHTML = `
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" name="faculties[]" placeholder="Faculty name" required>
       <button type="button" class="btn btn-danger" onclick="removeField(this)">-</button>
-    `;
-      subjectContainer.appendChild(newField);
-    }
-
-    // Function to dynamically add faculty and availability fields
-    function addFaculty() {
-      const availabilityContainer = document.getElementById('availabilityContainer');
-      const facultyId = `faculty-${Date.now()}`;
-
-      // Create faculty input and availability checkboxes
-      const newFacultyField = document.createElement('div');
-      newFacultyField.classList.add('mb-3');
-      newFacultyField.innerHTML = `
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" name="faculties[]" placeholder="Faculty name" required>
-        <button type="button" class="btn btn-danger" onclick="removeField(this)">-</button>
+    </div>
+    <div class="d-flex flex-wrap mb-3" id="${facultyId}">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Mon">
+        <label class="form-check-label">Mon</label>
       </div>
-      <div class="d-flex flex-wrap mb-3" id="${facultyId}">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Mon">
-          <label class="form-check-label">Mon</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Tue">
-          <label class="form-check-label">Tue</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Wed">
-          <label class="form-check-label">Wed</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Thu">
-          <label class="form-check-label">Thu</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Fri">
-          <label class="form-check-label">Fri</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Sat">
-          <label class="form-check-label">Sat</label>
-        </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Tue">
+        <label class="form-check-label">Tue</label>
       </div>
-    `;
-      availabilityContainer.appendChild(newFacultyField);
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Wed">
+        <label class="form-check-label">Wed</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Thu">
+        <label class="form-check-label">Thu</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Fri">
+        <label class="form-check-label">Fri</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Sat">
+        <label class="form-check-label">Sat</label>
+      </div>
+    </div>
+  `;
+    availabilityContainer.appendChild(newFacultyField);
+    alert(`availability_${facultyId}`);
+  }
+  // Function to remove dynamically added fields
+  function removeField(button) {
+    button.parentElement.parentElement.remove();
+  }
+
+  function removeFieldF(button) {
+    button.parentElement.remove();
+  }
+  // Form validation
+  document.getElementById('timetableForm').addEventListener('submit', function(e) {
+    const startTime = document.getElementById('start_time').value;
+    const endTime = document.getElementById('end_time').value;
+    const breakTime = document.getElementById('break_time').value;
+    const breakDuration = document.getElementById('break_duration').value;
+
+    // Convert time strings to Date objects for comparison
+    const start = new Date(`1970-01-01T${startTime}:00`);
+    const end = new Date(`1970-01-01T${endTime}:00`);
+    const breakStart = new Date(`1970-01-01T${breakTime}:00`);
+    const breakEnd = new Date(breakStart.getTime() + breakDuration * 60 * 1000);
+
+    // Check if break time is between start and end time
+    if (breakStart <= start || breakEnd >= end) {
+      alert("Break time must be between the college start and end time.");
+      e.preventDefault(); // Prevent form submission
+      return;
     }
 
-    // Function to remove dynamically added fields
-    function removeField(button) {
-      button.parentElement.parentElement.remove();
+    // If break is not exactly 30 minutes or 1 hour, show an error
+    if (breakDuration !== "30" && breakDuration !== "60") {
+      alert("Break duration must be either 30 minutes or 1 hour.");
+      e.preventDefault(); // Prevent form submission
+      return;
     }
+  });
+</script>
+<script src="bootstrap.bundle.min.js"></script>
 
-    // Form validation
-    document.getElementById('timetableForm').addEventListener('submit', function(e) {
-      const startTime = document.getElementById('start_time').value;
-      const endTime = document.getElementById('end_time').value;
-      const breakTime = document.getElementById('break_time').value;
-      const breakDuration = document.getElementById('break_duration').value;
-
-      // Convert time strings to Date objects for comparison
-      const start = new Date(`1970-01-01T${startTime}:00`);
-      const end = new Date(`1970-01-01T${endTime}:00`);
-      const breakStart = new Date(`1970-01-01T${breakTime}:00`);
-      const breakEnd = new Date(breakStart.getTime() + breakDuration * 60 * 1000);
-
-      // Check if break time is between start and end time
-      if (breakStart <= start || breakEnd >= end) {
-        alert("Break time must be between the college start and end time.");
-        e.preventDefault(); // Prevent form submission
-        return;
-      }
-
-      // If break is not exactly 30 minutes or 1 hour, show an error
-      if (breakDuration !== "30" && breakDuration !== "60") {
-        alert("Break duration must be either 30 minutes or 1 hour.");
-        e.preventDefault(); // Prevent form submission
-        return;
-      }
-    });
-  </script>
-  <script src="bootstrap.bundle.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
-  <script src="dashboard.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+<script src="dashboard.js"></script>
 </body>
 
 </html>

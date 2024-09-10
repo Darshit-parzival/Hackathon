@@ -55,25 +55,30 @@ $stmt->execute();
 
 // Insert faculties and availability
 if (isset($_POST['faculties'])) {
-  foreach ($_POST['faculties'] as $index => $faculty_name) {
-    // Insert into faculties table
-    $sql = "INSERT INTO faculties (college_id, faculty_name) VALUES (?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("is", $college_id, $faculty_name);
-    $stmt->execute();
-    $faculty_id = $stmt->insert_id;
-
-    // Insert into availability table
-    if (isset($_POST['availability_' . $index])) {
-      foreach ($_POST['availability_' . $index] as $day) {
-        $sql = "INSERT INTO availability (faculty_id, day) VALUES (?, ?)";
+    foreach ($_POST['faculties'] as $index => $faculty_name) {
+        // Insert into faculties table
+        $sql = "INSERT INTO faculties (college_id, faculty_name) VALUES (?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("is", $faculty_id, $day);
+        $stmt->bind_param("is", $college_id, $faculty_name);
         $stmt->execute();
-      }
+        $faculty_id = $stmt->insert_id; // Get the inserted faculty ID
+
+        // Handle dynamic availability checkboxes
+        $availability_key = 'availability_faculty-' . $index; // Matching the dynamically generated name from form
+        
+        // Check if the availability key exists in the form submission
+        if (isset($_POST[$availability_key])) {
+            foreach ($_POST[$availability_key] as $day) {
+                // Insert into availability table
+                $sql = "INSERT INTO availability (faculty_id, day) VALUES (?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("is", $faculty_id, $day);
+                $stmt->execute();
+            }
+        }
     }
-  }
 }
+
 
 // Close connection
 $stmt->close();
