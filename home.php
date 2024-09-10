@@ -113,24 +113,11 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
                   <input type="number" class="form-control" id="semester" name="semester" placeholder="Enter semester number" min="1" max="10" required>
                 </div>
 
-                <!-- Subjects and Total Hours (Dynamic) -->
-                <div id="subjectContainer" class="mb-3">
-                  <label for="subject" class="form-label">Subjects and Hours</label>
-                  <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="subjects[]" placeholder="Subject name" required>
-                    <input type="number" class="form-control" name="hours[]" placeholder="Total hours" required>
-                    <button type="button" class="btn btn-success" onclick="addSubject()">+</button>
-                  </div>
-                </div>
-
                 <!-- Faculty (Dynamic) -->
                 <div id="facultyContainer" class="mb-3">
                   <label for="faculty" class="form-label">Faculty and Availability</label>
-                  <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="faculties[]" placeholder="Faculty name" required>
-                    <button type="button" class="btn btn-success" onclick="addFaculty()">+</button>
-                  </div>
                   <div id="availabilityContainer"></div>
+                  <button type="button" class="btn btn-success" onclick="addFaculty()">+</button>
                 </div>
 
                 <!-- College Start and End Time -->
@@ -141,21 +128,6 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
                 <div class="mb-3">
                   <label for="end_time" class="form-label">College End Time</label>
                   <input type="time" class="form-control" id="end_time" name="end_time" required>
-                </div>
-
-                <!-- Break Time -->
-                <div class="mb-3">
-                  <label for="break_time" class="form-label">Break Time</label>
-                  <input type="time" class="form-control" id="break_time" name="break_time" required>
-                </div>
-
-                <!-- Working Days -->
-                <div class="mb-3">
-                  <label for="working_days" class="form-label">Working Days</label>
-                  <select class="form-control" id="working_days" name="working_days" required>
-                    <option value="Mon to Fri">Mon to Fri</option>
-                    <option value="Mon to Sat">Mon to Sat</option>
-                  </select>
                 </div>
 
                 <!-- Submit Button -->
@@ -169,103 +141,53 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
     </div>
   </div>
   <script>
-    // Function to add new subject and total hours fields
-    function addSubject() {
-      const subjectContainer = document.getElementById('subjectContainer');
-      const newField = document.createElement('div');
-      newField.classList.add('input-group', 'mb-3');
-      newField.innerHTML = `
-      <input type="text" class="form-control" name="subjects[]" placeholder="Subject name" required>
-      <input type="number" class="form-control" name="hours[]" placeholder="Total hours" required>
-      <button type="button" class="btn btn-danger" onclick="removeField(this)">-</button>
-    `;
-      subjectContainer.appendChild(newField);
-    }
+  function addFaculty() {
+    const availabilityContainer = document.getElementById('availabilityContainer');
+    const facultyId = `faculty-${Date.now()}`;
 
-    // Function to add new faculty fields with availability
-    function addFaculty() {
-      const facultyContainer = document.getElementById('facultyContainer');
-      const availabilityContainer = document.getElementById('availabilityContainer');
-      const facultyId = `faculty-${Date.now()}`;
-
-      // Faculty Input
-      const newFacultyField = document.createElement('div');
-      newFacultyField.classList.add('input-group', 'mb-3');
-      newFacultyField.innerHTML = `
-      <input type="text" class="form-control" name="faculties[]" placeholder="Faculty name" required>
-      <button type="button" class="btn btn-danger" onclick="removeField(this)">-</button>
-    `;
-      facultyContainer.appendChild(newFacultyField);
-
-      // Availability Input
-      const newAvailabilityField = document.createElement('div');
-      newAvailabilityField.classList.add('mb-3');
-      newAvailabilityField.innerHTML = `
-      <label for="${facultyId}" class="form-label">Faculty Availability for ${newFacultyField.querySelector('input').value}</label>
-      <div class="d-flex flex-wrap" id="${facultyId}">
+    // Create faculty input and availability checkboxes
+    const newFacultyField = document.createElement('div');
+    newFacultyField.classList.add('mb-3');
+    newFacultyField.innerHTML = `
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" name="faculties[]" placeholder="Faculty name" required>
+        <button type="button" class="btn btn-danger" onclick="removeField(this)">-</button>
+      </div>
+      <div class="d-flex flex-wrap mb-3" id="${facultyId}">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Mon" id="dayMon-${facultyId}">
-          <label class="form-check-label" for="dayMon-${facultyId}">Mon</label>
+          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Mon">
+          <label class="form-check-label">Mon</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Tue" id="dayTue-${facultyId}">
-          <label class="form-check-label" for="dayTue-${facultyId}">Tue</label>
+          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Tue">
+          <label class="form-check-label">Tue</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Wed" id="dayWed-${facultyId}">
-          <label class="form-check-label" for="dayWed-${facultyId}">Wed</label>
+          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Wed">
+          <label class="form-check-label">Wed</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Thu" id="dayThu-${facultyId}">
-          <label class="form-check-label" for="dayThu-${facultyId}">Thu</label>
+          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Thu">
+          <label class="form-check-label">Thu</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Fri" id="dayFri-${facultyId}">
-          <label class="form-check-label" for="dayFri-${facultyId}">Fri</label>
+          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Fri">
+          <label class="form-check-label">Fri</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Sat" id="daySat-${facultyId}">
-          <label class="form-check-label" for="daySat-${facultyId}">Sat</label>
+          <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Sat">
+          <label class="form-check-label">Sat</label>
         </div>
       </div>
     `;
-      availabilityContainer.appendChild(newAvailabilityField);
-    }
+    availabilityContainer.appendChild(newFacultyField);
+  }
 
-    // Function to remove fields
-    function removeField(button) {
-      button.parentElement.remove();
-    }
-
-    // Form validation
-    document.getElementById('timetableForm').addEventListener('submit', function(e) {
-      const startTime = document.getElementById('start_time').value;
-      const endTime = document.getElementById('end_time').value;
-      const breakTime = document.getElementById('break_time').value;
-
-      // Convert time strings to Date objects for comparison
-      const start = new Date(`1970-01-01T${startTime}:00`);
-      const end = new Date(`1970-01-01T${endTime}:00`);
-      const breakT = new Date(`1970-01-01T${breakTime}:00`);
-
-      // Check if break time is between start and end time
-      if (breakT <= start || breakT >= end) {
-        alert("Break time must be between the start and end time of the college.");
-        e.preventDefault(); // Prevent form submission
-        return;
-      }
-
-      // Check if break time is 30 min or 1 hour after start time
-      const oneHourLater = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour later
-      const thirtyMinLater = new Date(start.getTime() + 30 * 60 * 1000); // 30 minutes later
-
-      if (breakT < thirtyMinLater || (breakT > oneHourLater && breakT.getTime() !== oneHourLater.getTime())) {
-        alert("Break time should be 30 minutes or 1 hour after the college start time.");
-        e.preventDefault(); // Prevent form submission
-        return;
-      }
-    });
-  </script>
+  // Function to remove fields
+  function removeField(button) {
+    button.parentElement.parentElement.remove();
+  }
+</script>
 
   <script src="bootstrap.bundle.min.js"></script>
 
