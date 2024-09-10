@@ -23,9 +23,9 @@ $break_time = $_POST['break_time'];
 $break_duration = $_POST['break_duration'];
 
 // Insert into colleges table
-$sql = "INSERT INTO colleges (college_name, branch_name, semester, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
+$sql = "INSERT INTO colleges (college_name, branch_name, semester, start_time, end_time, classrooms, batches) VALUES (?, ?, ?, ?, ?,?,?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssiss", $college_name, $branch_name, $semester, $start_time, $end_time);
+$stmt->bind_param("ssissii", $college_name, $branch_name, $semester, $start_time, $end_time);
 $stmt->execute();
 
 // Get the last inserted college ID
