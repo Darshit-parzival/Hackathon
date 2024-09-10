@@ -19,6 +19,8 @@ $branch_name = $_POST['branch'];
 $semester = $_POST['semester'];
 $start_time = $_POST['start_time'];
 $end_time = $_POST['end_time'];
+$break_time = $_POST['break_time'];
+$break_duration = $_POST['break_duration'];
 
 // Insert into colleges table
 $sql = "INSERT INTO colleges (college_name, branch_name, semester, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
@@ -28,6 +30,28 @@ $stmt->execute();
 
 // Get the last inserted college ID
 $college_id = $stmt->insert_id;
+
+// Insert subjects
+if (isset($_POST['subjects']) && isset($_POST['subjectHours'])) {
+  $subjects = $_POST['subjects'];
+  $subjectHours = $_POST['subjectHours'];
+
+  for ($i = 0; $i < count($subjects); $i++) {
+    $subject_name = $subjects[$i];
+    $hours_per_week = $subjectHours[$i];
+
+    $sql = "INSERT INTO subjects (college_id, subject_name, hours_per_week) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("isi", $college_id, $subject_name, $hours_per_week);
+    $stmt->execute();
+  }
+}
+
+// Insert breaks
+$sql = "INSERT INTO breaks (college_id, break_time, break_duration) VALUES (?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("isi", $college_id, $break_time, $break_duration);
+$stmt->execute();
 
 // Insert faculties and availability
 if (isset($_POST['faculties'])) {
