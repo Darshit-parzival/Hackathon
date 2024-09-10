@@ -21,7 +21,7 @@ $start_time = $_POST['start_time'];
 $end_time = $_POST['end_time'];
 $break_time = $_POST['break_time'];
 $break_duration = $_POST['break_duration'];
-$classrooms= $_POST['classrooms'];
+$classrooms = $_POST['classrooms'];
 $batches = $_POST['batches'];
 
 // Insert into colleges table
@@ -84,7 +84,11 @@ if (isset($_POST['faculties'])) {
         }
     }
 }
-$_SESSION['college_id'] = $college_id; 
+if ($_SESSION['college_id'] = $college_id) {
+    header("Location: timetable2.php");
+} else {
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
 
 // Close connection
 $stmt->close();
