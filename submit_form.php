@@ -84,7 +84,7 @@ if (isset($_POST['faculties'])) {
         }
     }
 }
-
+$_SESSION['college_id'] = $college_id; 
 
 // Close connection
 $stmt->close();

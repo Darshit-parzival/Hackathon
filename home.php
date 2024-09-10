@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
   exit;
 }
 
-$_SESSION['college_id'] = 15;
+
 ?>
 
 
