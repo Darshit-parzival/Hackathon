@@ -6,6 +6,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
   exit;
 }
 
+
 ?>
 
 
@@ -59,16 +60,16 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
     </div>
   </header>
 
-  <div class="container">
-  <div class="row">
-    <div class="col-md-6">
-      <h2>Create Time Table</h2>
-      <form id="timetableForm">
-        <!-- College Name -->
-        <div class="mb-3">
-          <label for="college" class="form-label">College Name</label>
-          <input type="text" class="form-control" id="college" name="college" placeholder="Enter college name" required>
-        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <h2>Create Time Table</h2>
+              <form id="timetableForm">
+                <!-- College Name -->
+                <div class="mb-3">
+                  <label for="college" class="form-label">College Name</label>
+                  <input type="text" class="form-control" id="college" name="college" placeholder="Enter college name" required>
+                </div>
 
         <!-- Branch Name and Semester -->
         <div class="mb-3">
@@ -180,7 +181,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
           <input class="form-check-input" type="checkbox" name="availability_${facultyId}[]" value="Sat">
           <label class="form-check-label">Sat</label>
         </div>
-      </div>
+      </div>xxz
     `;
     availabilityContainer.appendChild(newFacultyField);
   }
