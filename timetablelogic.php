@@ -13,7 +13,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$college_id = $_SESSION['college_id']; // You can change this to whatever ID you need
+$college_id = $_SESSION['college_id'] + 3;
+echo $college_id; // You can change this to whatever ID you need
 $sql = "SELECT start_time, end_time FROM colleges WHERE id = $college_id";
 $result = $conn->query($sql);
 
@@ -81,7 +82,8 @@ function generateTimeSlotsWithBreaks($start_time, $end_time, $breaks)
 $timeSlots = generateTimeSlotsWithBreaks($start_time, $end_time, $breaks);
 
 
-function getAvailableFaculties() {
+function getAvailableFaculties()
+{
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -124,7 +126,8 @@ function getAvailableFaculties() {
 }
 
 
-function getFacultyDetails($faculty_id) {
+function getFacultyDetails($faculty_id)
+{
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -138,187 +141,40 @@ function getFacultyDetails($faculty_id) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Retrieve faculty details
-    $faculty_name_sql = "SELECT faculty_name FROM faculties WHERE id = $faculty_id";
-    $faculty_name_result = $conn->query($faculty_name_sql);
+    // Retrieve faculty details including subject and subject_code
+    $faculty_sql = "
+        SELECT f.faculty_name, f.subject_code, s.subject_name 
+        FROM faculties f
+        JOIN subjects s ON f.subject_code = s.subject_code
+        WHERE f.id = $faculty_id
+    ";
 
-    if (!$faculty_name_result) {
+    $faculty_result = $conn->query($faculty_sql);
+
+    if (!$faculty_result) {
         echo "Error executing query for faculty ID $faculty_id: " . $conn->error . "<br>";
         return null;
     }
 
-    $faculty_name_row = $faculty_name_result->fetch_assoc();
+    $faculty_row = $faculty_result->fetch_assoc();
 
     // Close connection
     $conn->close();
 
-    return $faculty_name_row ? $faculty_name_row['faculty_name'] : null;
+    return $faculty_row ? $faculty_row : null; // Return the entire row with name, subject, and subject code
 }
 
-// function displayMondayFaculties($timeSlots) {
-//     $available_faculties = getAvailableFaculties();
-//     $num_faculties = count($available_faculties['Mon']);
-//     $faculty_names = [];
 
-//     for ($i = 0; $i < $num_faculties; $i++) {
-//         $faculty_names[$i] = getFacultyDetails($available_faculties['Mon'][$i]);
-//     }
 
-//     $faculty_count = 0;
-//     $result = [];
-
-//     foreach ($timeSlots as $slot) {
-//         if (!$slot['isBreak']) {
-//             $current_time = $slot['slot'];
-//             $faculty_name = $num_faculties > 0 ? $faculty_names[$faculty_count % $num_faculties] : 'N/A';
-//             $result[] = ['time' => $current_time, 'faculty' => $faculty_name];
-//             $faculty_count++;
-//         } else {
-//             $result[] = ['time' => $slot['slot'], 'faculty' => 'Break'];
-//         }
-//     }
-
-//     return $result;
-// }
-
-// function displayTuesdayFaculties($timeSlots) {
-//     $available_faculties = getAvailableFaculties();
-//     $num_faculties = count($available_faculties['Tue']);
-//     $faculty_names = [];
-
-//     for ($i = 0; $i < $num_faculties; $i++) {
-//         $faculty_names[$i] = getFacultyDetails($available_faculties['Tue'][$i]);
-//     }
-
-//     $faculty_count = 0;
-//     $result = [];
-
-//     foreach ($timeSlots as $slot) {
-//         if (!$slot['isBreak']) {
-//             $current_time = $slot['slot'];
-//             $faculty_name = $num_faculties > 0 ? $faculty_names[$faculty_count % $num_faculties] : 'N/A';
-//             $result[] = ['time' => $current_time, 'faculty' => $faculty_name];
-//             $faculty_count++;
-//         } else {
-//             $result[] = ['time' => $slot['slot'], 'faculty' => 'Break'];
-//         }
-//     }
-
-//     return $result;
-// }
-
-// function displayWednesdayFaculties($timeSlots) {
-//     $available_faculties = getAvailableFaculties();
-//     $num_faculties = count($available_faculties['Wed']);
-//     $faculty_names = [];
-
-//     for ($i = 0; $i < $num_faculties; $i++) {
-//         $faculty_names[$i] = getFacultyDetails($available_faculties['Wed'][$i]);
-//     }
-
-//     $faculty_count = 0;
-//     $result = [];
-
-//     foreach ($timeSlots as $slot) {
-//         if (!$slot['isBreak']) {
-//             $current_time = $slot['slot'];
-//             $faculty_name = $num_faculties > 0 ? $faculty_names[$faculty_count % $num_faculties] : 'N/A';
-//             $result[] = ['time' => $current_time, 'faculty' => $faculty_name];
-//             $faculty_count++;
-//         } else {
-//             $result[] = ['time' => $slot['slot'], 'faculty' => 'Break'];
-//         }
-//     }
-
-//     return $result;
-// }
-
-// function displayThursdayFaculties($timeSlots) {
-//     $available_faculties = getAvailableFaculties();
-//     $num_faculties = count($available_faculties['Thu']);
-//     $faculty_names = [];
-
-//     for ($i = 0; $i < $num_faculties; $i++) {
-//         $faculty_names[$i] = getFacultyDetails($available_faculties['Thu'][$i]);
-//     }
-
-//     $faculty_count = 0;
-//     $result = [];
-
-//     foreach ($timeSlots as $slot) {
-//         if (!$slot['isBreak']) {
-//             $current_time = $slot['slot'];
-//             $faculty_name = $num_faculties > 0 ? $faculty_names[$faculty_count % $num_faculties] : 'N/A';
-//             $result[] = ['time' => $current_time, 'faculty' => $faculty_name];
-//             $faculty_count++;
-//         } else {
-//             $result[] = ['time' => $slot['slot'], 'faculty' => 'Break'];
-//         }
-//     }
-
-//     return $result;
-// }
-
-// function displayFridayFaculties($timeSlots) {
-//     $available_faculties = getAvailableFaculties();
-//     $num_faculties = count($available_faculties['Fri']);
-//     $faculty_names = [];
-
-//     for ($i = 0; $i < $num_faculties; $i++) {
-//         $faculty_names[$i] = getFacultyDetails($available_faculties['Fri'][$i]);
-//     }
-
-//     $faculty_count = 0;
-//     $result = [];
-
-//     foreach ($timeSlots as $slot) {
-//         if (!$slot['isBreak']) {
-//             $current_time = $slot['slot'];
-//             $faculty_name = $num_faculties > 0 ? $faculty_names[$faculty_count % $num_faculties] : 'N/A';
-//             $result[] = ['time' => $current_time, 'faculty' => $faculty_name];
-//             $faculty_count++;
-//         } else {
-//             $result[] = ['time' => $slot['slot'], 'faculty' => 'Break'];
-//         }
-//     }
-
-//     return $result;
-// }
-
-// function displaySaturdayFaculties($timeSlots) {
-//     $available_faculties = getAvailableFaculties();
-//     $num_faculties = count($available_faculties['Fri']);
-//     $faculty_names = [];
-
-//     for ($i = 0; $i < $num_faculties; $i++) {
-//         $faculty_names[$i] = getFacultyDetails($available_faculties['Sat'][$i]);
-//     }
-
-//     $faculty_count = 0;
-//     $result = [];
-
-//     foreach ($timeSlots as $slot) {
-//         if (!$slot['isBreak']) {
-//             $current_time = $slot['slot'];
-//             $faculty_name = $num_faculties > 0 ? $faculty_names[$faculty_count % $num_faculties] : 'N/A';
-//             $result[] = ['time' => $current_time, 'faculty' => $faculty_name];
-//             $faculty_count++;
-//         } else {
-//             $result[] = ['time' => $slot['slot'], 'faculty' => 'Break'];
-//         }
-//     }
-
-//     return $result;
-// }
-
-function displayDayFaculties($day, $timeSlots) {
+function displayDayFaculties($day, $timeSlots)
+{
     $available_faculties = getAvailableFaculties();
     $day_key = ucfirst(strtolower($day)); // Capitalize the first letter of the day
     $num_faculties = count($available_faculties[$day_key]);
-    $faculty_names = [];
+    $faculty_details = [];
 
     for ($i = 0; $i < $num_faculties; $i++) {
-        $faculty_names[$i] = getFacultyDetails($available_faculties[$day_key][$i]);
+        $faculty_details[$i] = getFacultyDetails($available_faculties[$day_key][$i]);
     }
 
     $faculty_count = 0;
@@ -327,13 +183,30 @@ function displayDayFaculties($day, $timeSlots) {
     foreach ($timeSlots as $slot) {
         if (!$slot['isBreak']) {
             $current_time = $slot['slot'];
-            $faculty_name = $num_faculties > 0 ? $faculty_names[$faculty_count % $num_faculties] : 'N/A';
-            $result[] = ['time' => $current_time, 'faculty' => $faculty_name];
+            if ($num_faculties > 0) {
+                $faculty_info = $faculty_details[$faculty_count % $num_faculties];
+                $faculty_name = $faculty_info['faculty_name'];
+                $subject_name = $faculty_info['subject_name'];
+                $subject_code = $faculty_info['subject_code'];
+            } else {
+                $faculty_name = 'N/A';
+                $subject_name = 'N/A';
+                $subject_code = 'N/A';
+            }
+
+            $result[] = [
+                'time' => $current_time, 
+                'faculty' => $faculty_name, 
+                'subject' => $subject_name,
+                'subject_code' => $subject_code
+            ];
+
             $faculty_count++;
         } else {
-            $result[] = ['time' => $slot['slot'], 'faculty' => 'Break'];
+            $result[] = ['time' => $slot['slot'], 'faculty' => 'Break', 'subject' => '', 'subject_code' => ''];
         }
     }
 
     return $result;
 }
+

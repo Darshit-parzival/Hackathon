@@ -171,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = "root";
     $dbname = "hackathon";
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli($servername, $username, "", $dbname);
 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
